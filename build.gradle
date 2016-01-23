@@ -1,0 +1,81 @@
+//import org.ajoberstar.grgit.Grgit
+//import java.text.SimpleDateFormat
+
+buildscript {
+  repositories {
+    mavenLocal()
+    jcenter()
+    mavenCentral()
+  }
+  dependencies {
+    classpath 'com.github.ben-manes:gradle-versions-plugin:0.12.0'
+  }
+}
+
+group = 'org.vafer'
+
+apply plugin: 'com.github.ben-manes.versions'
+apply plugin: 'maven'
+apply plugin: 'java'
+
+def langLevel = JavaVersion.VERSION_1_7
+sourceCompatibility = langLevel
+targetCompatibility = langLevel
+
+repositories {
+  mavenLocal()
+  jcenter()
+  mavenCentral()
+}
+
+ext {
+  mavenVersion = '3.2.5'
+  mavenPluginPluginVersion = '3.4'
+}
+
+def dependencyVersions = [
+    "org.codehaus.plexus:plexus-classworlds:2.5.2",
+    "org.codehaus.plexus:plexus-utils:3.0.20",
+]
+
+def dependencyVersionsByGroup = [
+    'org.apache.maven': mavenVersion,
+]
+
+dependencies {
+  compile 'org.apache.ant:ant:1.9.6'
+  compile "org.apache.maven:maven-core:${mavenVersion}"
+  compile "org.apache.maven:maven-plugin-api:${mavenVersion}"
+  compile "org.apache.maven.plugin-tools:maven-plugin-annotations:${mavenPluginPluginVersion}"
+//  providedCompile "org.apache.maven.plugin-tools:maven-plugin-annotations:${mavenPluginPluginVersion}"
+  compile 'commons-io:commons-io:2.4'
+  compile 'org.apache.commons:commons-compress:1.10'
+  compile 'org.bouncycastle:bcpg-jdk15on:1.53'
+  compile 'org.tukaani:xz:1.5'
+  testCompile 'junit:junit:3.8.2'
+  testCompile 'org.mockito:mockito-core:1.9.5'
+}
+
+configurations {
+//    all*.exclude module: 'log4j'
+//    all*.exclude module: 'servlet-api'
+
+  all {
+    resolutionStrategy {
+      failOnVersionConflict()
+
+      force dependencyVersions
+
+      eachDependency { DependencyResolveDetails details ->
+        if (dependencyVersionsByGroup[details.requested.group]) {
+          details.useVersion dependencyVersionsByGroup[details.requested.group]
+        }
+      }
+    }
+  }
+}
+
+task wrapper(type: Wrapper) {
+  gradleVersion = '2.10'
+  distributionUrl = "https://services.gradle.org/distributions/gradle-${gradleVersion}-all.zip"
+}

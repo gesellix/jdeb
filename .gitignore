@@ -3,6 +3,8 @@
 .project
 .settings
 target
+build
+.gradle
 eclipse
 dependency-reduced-pom.xml
 *.iml
