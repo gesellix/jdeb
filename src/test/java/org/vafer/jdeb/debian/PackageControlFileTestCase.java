@@ -16,7 +16,6 @@
 
 package org.vafer.jdeb.debian;
 
-import java.io.FileInputStream;
 import java.text.ParseException;
 
 import junit.framework.TestCase;
@@ -106,7 +105,7 @@ public final class PackageControlFileTestCase extends TestCase {
 
     public void testGetDescription() throws Exception {
         BinaryPackageControlFile packageControlFile = new BinaryPackageControlFile();
-        packageControlFile.parse(new FileInputStream("target/test-classes/org/vafer/jdeb/deb/control/control"));
+        packageControlFile.parse(getClass().getResourceAsStream("/org/vafer/jdeb/deb/control/control"));
 
         assertEquals("Description", "revision @REVISION@, test package\n" +
                 "This is a sample package control file.\n\n" +
@@ -116,7 +115,7 @@ public final class PackageControlFileTestCase extends TestCase {
 
     public void testGetUserDefinedFields() throws Exception {
         BinaryPackageControlFile packageControlFile = new BinaryPackageControlFile();
-        packageControlFile.parse(new FileInputStream("target/test-classes/org/vafer/jdeb/deb/control/control"));
+        packageControlFile.parse(getClass().getResourceAsStream("/org/vafer/jdeb/deb/control/control"));
         assertEquals("UserDefinedField", "This is a user defined field.",  packageControlFile.get("UserDefinedField"));
     }
 }

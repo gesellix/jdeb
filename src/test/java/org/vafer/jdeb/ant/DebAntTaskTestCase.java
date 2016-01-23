@@ -23,6 +23,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.net.URISyntaxException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import junit.framework.TestCase;
@@ -49,7 +50,7 @@ public final class DebAntTaskTestCase extends TestCase {
         project.setCoreLoader(getClass().getClassLoader());
         project.init();
 
-        File buildFile = new File("target/test-classes/testbuild.xml");
+        File buildFile = new File(getClass().getResource("/testbuild.xml").toURI());
         project.setBaseDir(buildFile.getParentFile());
 
         final ProjectHelper helper = ProjectHelper.getProjectHelper();
@@ -89,16 +90,16 @@ public final class DebAntTaskTestCase extends TestCase {
         }
     }
 
-    public void testEmptyPackage() {
+    public void testEmptyPackage() throws Exception {
         project.executeTarget("empty-package");
 
-        assertTrue("package not build", new File("target/test-classes/test.deb").exists());
+        assertTrue("package not build", new File(getClass().getResource("/test.deb").toURI()).exists());
     }
 
-    public void testPackageWithArchive() {
+    public void testPackageWithArchive() throws Exception {
         project.executeTarget("with-archive");
 
-        assertTrue("package not build", new File("target/test-classes/test.deb").exists());
+        assertTrue("package not build", new File(getClass().getResource("/test.deb").toURI()).exists());
     }
 
     public void testPackageWithMissingArchive() {
@@ -110,10 +111,10 @@ public final class DebAntTaskTestCase extends TestCase {
         }
     }
 
-    public void testPackageWithDirectory() {
+    public void testPackageWithDirectory() throws Exception {
         project.executeTarget("with-directory");
 
-        assertTrue("package not build", new File("target/test-classes/test.deb").exists());
+        assertTrue("package not build", new File(getClass().getResource("/test.deb").toURI()).exists());
     }
 
     public void testPackageWithMissingDirectory() {
@@ -171,16 +172,16 @@ public final class DebAntTaskTestCase extends TestCase {
         }
     }
 
-    public void testFileSet() {
+    public void testFileSet() throws Exception {
         project.executeTarget("fileset");
 
-        assertTrue("package not build", new File("target/test-classes/test.deb").exists());
+        assertTrue("package not build", new File(getClass().getResource("/test.deb").toURI()).exists());
     }
 
     public void testTarFileSet() throws Exception {
         project.executeTarget("tarfileset");
 
-        File deb = new File("target/test-classes/test.deb");
+        File deb = new File(getClass().getResource("/test.deb").toURI());
         assertTrue("package not build", deb.exists());
 
         ArchiveWalker.walkData(deb, new ArchiveVisitor<TarArchiveEntry>() {
@@ -200,7 +201,7 @@ public final class DebAntTaskTestCase extends TestCase {
     public void testLink() throws Exception {
         project.executeTarget("link");
 
-        File deb = new File("target/test-classes/test.deb");
+        File deb = new File(getClass().getResource("/test.deb").toURI());
         assertTrue("package not build", deb.exists());
 
         final AtomicBoolean linkFound = new AtomicBoolean(false);
@@ -222,7 +223,7 @@ public final class DebAntTaskTestCase extends TestCase {
     public void testMapper() throws Exception {
         project.executeTarget("perm-mapper");
 
-        File deb = new File("target/test-classes/test.deb");
+        File deb = new File(getClass().getResource("/test.deb").toURI());
         assertTrue("package not build", deb.exists());
 
         ArchiveWalker.walkData(deb, new ArchiveVisitor<TarArchiveEntry>() {
@@ -246,7 +247,7 @@ public final class DebAntTaskTestCase extends TestCase {
     public void testBZip2Compression() throws Exception {
         project.executeTarget("bzip2-compression");
 
-        File deb = new File("target/test-classes/test.deb");
+        File deb = new File(getClass().getResource("/test.deb").toURI());
         assertTrue("package not build", deb.exists());
 
         final AtomicBoolean found = new AtomicBoolean(false);
@@ -273,7 +274,7 @@ public final class DebAntTaskTestCase extends TestCase {
     public void testXZCompression() throws Exception {
         project.executeTarget("xz-compression");
 
-        File deb = new File("target/test-classes/test.deb");
+        File deb = new File(getClass().getResource("/test.deb").toURI());
         assertTrue("package not build", deb.exists());
 
         final AtomicBoolean found = new AtomicBoolean(false);
@@ -304,7 +305,7 @@ public final class DebAntTaskTestCase extends TestCase {
     public void testNoCompression() throws Exception {
         project.executeTarget("no-compression");
 
-        File deb = new File("target/test-classes/test.deb");
+        File deb = new File(getClass().getResource("/test.deb").toURI());
         assertTrue("package not build", deb.exists());
 
         boolean found = ArchiveWalker.walkData(deb, new ArchiveVisitor<TarArchiveEntry>() {
@@ -315,9 +316,9 @@ public final class DebAntTaskTestCase extends TestCase {
         assertTrue("tar file not found", found);
     }
 
-    public void testPackageConffiles() {
+    public void testPackageConffiles() throws Exception {
         project.executeTarget("conffiles");
 
-        assertTrue("package not build", new File("target/test-classes/test.deb").exists());
+        assertTrue("package not build", new File(getClass().getResource("/test.deb").toURI()).exists());
     }
 }

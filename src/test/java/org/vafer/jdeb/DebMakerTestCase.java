@@ -39,7 +39,7 @@ public class DebMakerTestCase extends TestCase {
 
     public void testCreation() throws Exception {
 
-        File control = new File(getClass().getResource("deb/control/control").toURI());
+//        File control = new File(getClass().getResource("deb/control/control").toURI());
         File archive1 = new File(getClass().getResource("deb/data.tgz").toURI());
         File archive2 = new File(getClass().getResource("deb/data.tar.bz2").toURI());
         File archive3 = new File(getClass().getResource("deb/data.zip").toURI());
@@ -91,7 +91,7 @@ public class DebMakerTestCase extends TestCase {
         Collection<DataProducer> conffileProducers = Arrays.asList(new DataProducer[] {new EmptyDataProducer()});
         DebMaker maker = new DebMaker(new NullConsole(), producers, conffileProducers);
         maker.setDeb(deb);
-        maker.setControl(new File("target/test-classes/org/vafer/jdeb/deb/control"));
+      maker.setControl(new File(getClass().getResource("deb/control").toURI()));
 
         maker.createDeb(Compression.NONE);
 
@@ -136,7 +136,7 @@ public class DebMakerTestCase extends TestCase {
         Collection<DataProducer> conffileProducers = Arrays.asList(new DataProducer[] {new EmptyDataProducer()});
         DebMaker maker = new DebMaker(new NullConsole(), producers, conffileProducers);
         maker.setDeb(deb);
-        maker.setControl(new File("target/test-classes/org/vafer/jdeb/deb/control"));
+      maker.setControl(new File(getClass().getResource("deb/control").toURI()));
         maker.setResolver(new MapVariableResolver(variables));
 
         maker.createDeb(Compression.NONE);
@@ -171,7 +171,7 @@ public class DebMakerTestCase extends TestCase {
         Collection<DataProducer> conffileProducers = Arrays.asList(new DataProducer[] {new EmptyDataProducer()});
         DebMaker maker = new DebMaker(new NullConsole(), producers, conffileProducers);
         maker.setDeb(deb);
-        maker.setControl(new File("target/test-classes/org/vafer/jdeb/deb/controlwithoutdepends"));
+      maker.setControl(new File(getClass().getResource("deb/controlwithoutdepends").toURI()));
 
         maker.createDeb(Compression.NONE);
 
